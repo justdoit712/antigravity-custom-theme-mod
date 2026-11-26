@@ -1663,30 +1663,30 @@
         </div>
 
         <div class="agy-boot-stage" id="agy-stage-1">
-          <div style="margin-bottom:6px"><span class="agy-hud-title" data-stagger="26">YÊU CẦU QUYỀN TRUY CẬP</span></div>
+          <div style="margin-bottom:6px"><span class="agy-hud-title" data-stagger="26">ACCESS REQUEST</span></div>
           <div class="agy-hud-subtitle" data-stagger="14">ACCESS PERMISSION REQUIRED</div>
           <button class="agy-hud-btn" id="agy-btn-grant" type="button">
-            <span>CẤP QUYỀN &nbsp; GRANT ACCESS</span>
+            <span>GRANT ACCESS</span>
           </button>
-          <div class="agy-hud-hint">Nhấn Enter / Space hoặc bấm nút để tiếp tục</div>
+          <div class="agy-hud-hint">Press Enter / Space or click to continue</div>
         </div>
 
         <div class="agy-boot-stage" id="agy-stage-2">
-          <div style="margin-bottom:6px"><span class="agy-hud-title" data-stagger="26">XÁC MINH DANH TÍNH</span></div>
+          <div style="margin-bottom:6px"><span class="agy-hud-title" data-stagger="26">VERIFY IDENTITY</span></div>
           <div class="agy-hud-subtitle" data-stagger="14">IDENTITY VERIFICATION</div>
           <div class="agy-id-table">
-            <div class="agy-id-row"><span>TÊN TRUY CẬP / OPERATOR</span><span>SENSEI</span></div>
-            <div class="agy-id-row"><span>MÃ ĐỊNH DANH / UID</span><span>0042</span></div>
-            <div class="agy-id-row"><span>CẤP QUYỀN / LEVEL</span><span>∞</span></div>
+            <div class="agy-id-row"><span>OPERATOR</span><span>SENSEI</span></div>
+            <div class="agy-id-row"><span>UID</span><span>0042</span></div>
+            <div class="agy-id-row"><span>CLEARANCE LEVEL</span><span>∞</span></div>
           </div>
           <button class="agy-hud-btn" id="agy-btn-confirm" type="button">
-            <span>XÁC NHẬN &nbsp; CONFIRM IDENTITY</span>
+            <span>CONFIRM IDENTITY</span>
           </button>
-          <div class="agy-hud-hint">Nhấn Enter / Space hoặc bấm nút để xác nhận</div>
+          <div class="agy-hud-hint">Press Enter / Space or click to confirm</div>
         </div>
 
         <div class="agy-boot-stage" id="agy-stage-morph">
-          <div style="margin-bottom:6px"><span class="agy-hud-title" id="agy-morph-title" data-stagger="16">ĐANG TIẾP NHẬN YÊU CẦU</span></div>
+          <div style="margin-bottom:6px"><span class="agy-hud-title" id="agy-morph-title" data-stagger="16">RECEIVING REQUEST</span></div>
           <div class="agy-hud-subtitle" id="agy-morph-sub" data-stagger="10" style="margin-bottom:10px">ACCESS REQUEST RECEIVED</div>
           <div class="agy-icon-morph-box">
             <svg class="agy-icon-outline-svg" id="agy-icon-outline-svg" viewBox="0 0 256 256">
@@ -1726,7 +1726,7 @@
               <div class="agy-orbit-dot w" style="bottom:24%;right:28%"></div>
             </div>
             <div>
-              <div class="agy-hud-title" data-stagger="24" style="font-size:17px;letter-spacing:0.1em;margin-bottom:6px">HOÀN TẤT · ĐÃ XÁC THỰC</div>
+              <div class="agy-hud-title" data-stagger="24" style="font-size:17px;letter-spacing:0.1em;margin-bottom:6px">COMPLETE · VERIFIED</div>
               <div class="agy-hud-subtitle" data-stagger="14" style="margin-bottom:0;font-size:9px;letter-spacing:0.24em">READ COMPLETE · VERIFIED</div>
             </div>
           </div>
@@ -1739,7 +1739,7 @@
             <img src="${iconColorUrl}" alt="Antigravity" />
           </div>
           <div class="agy-dot-grid-small agy-welcome-reveal" style="margin-bottom:8px;animation-delay:460ms">A N T I G R A V I T Y</div>
-          <div class="agy-hud-hint agy-welcome-reveal" style="color:#a1a1aa;letter-spacing:0.2em;animation-delay:540ms">CHÀO MỪNG SENSEI • SESSION READY</div>
+          <div class="agy-hud-hint agy-welcome-reveal" style="color:#a1a1aa;letter-spacing:0.2em;animation-delay:540ms">WELCOME SENSEI • SESSION READY</div>
         </div>
       </div>
 
@@ -1911,8 +1911,8 @@
     }
 
     function runAutoSequenceAfterConfirm() {
-      morphTitle.dataset.rawText = 'ĐANG TIẾP NHẬN YÊU CẦU';
-      morphTitle.textContent = 'ĐANG TIẾP NHẬN YÊU CẦU';
+      morphTitle.dataset.rawText = 'RECEIVING REQUEST';
+      morphTitle.textContent = 'RECEIVING REQUEST';
       morphSub.dataset.rawText = 'ACCESS REQUEST RECEIVED';
       morphSub.textContent = 'ACCESS REQUEST RECEIVED';
       iconOutlineSvg.classList.remove('fade-stroke');
@@ -1930,8 +1930,8 @@
         fillPhaseStarted = true;
 
         // Fill immediately on stroke completion while swapping the caption concurrently
-        morphTitle.dataset.rawText = 'BẮT ĐẦU ĐỌC QUYỀN HẠN';
-        morphTitle.textContent = 'BẮT ĐẦU ĐỌC QUYỀN HẠN';
+        morphTitle.dataset.rawText = 'READING PERMISSIONS';
+        morphTitle.textContent = 'READING PERMISSIONS';
         morphSub.dataset.rawText = 'PERMISSION READ STARTED';
         morphSub.textContent = 'PERMISSION READ STARTED';
         showStage(4, true);
@@ -3065,11 +3065,11 @@
                 <span id="agy-blur-val" style="min-width: 30px; text-align: right;">${st.glassBlur}px</span>
               </label>
               <div style="display: inline-flex; border-radius: 8px; overflow: hidden; border: 1px solid ${mainTheme.borderColor}; background: rgba(0,0,0,0.28);">
-                <button id="agy-mode-image" type="button" style="padding: 4px 10px; font-size: 11.5px; cursor: pointer; border: none; background: ${st.wpMode === 'image' ? 'rgba(255,255,255,0.18)' : 'transparent'}; color: ${st.wpMode === 'image' ? '#ffffff' : '#a1a1aa'}; font-weight: ${st.wpMode === 'image' ? '600' : '400'};">Ảnh tĩnh</button>
-                <button id="agy-mode-video" type="button" style="padding: 4px 10px; font-size: 11.5px; cursor: pointer; border: none; border-left: 1px solid ${mainTheme.borderColor}; background: ${st.wpMode === 'video' ? 'rgba(255,255,255,0.18)' : 'transparent'}; color: ${st.wpMode === 'video' ? '#ffffff' : '#a1a1aa'}; font-weight: ${st.wpMode === 'video' ? '600' : '400'};">Video động</button>
+                <button id="agy-mode-image" type="button" style="padding: 4px 10px; font-size: 11.5px; cursor: pointer; border: none; background: ${st.wpMode === 'image' ? 'rgba(255,255,255,0.18)' : 'transparent'}; color: ${st.wpMode === 'image' ? '#ffffff' : '#a1a1aa'}; font-weight: ${st.wpMode === 'image' ? '600' : '400'};">Static Image</button>
+                <button id="agy-mode-video" type="button" style="padding: 4px 10px; font-size: 11.5px; cursor: pointer; border: none; border-left: 1px solid ${mainTheme.borderColor}; background: ${st.wpMode === 'video' ? 'rgba(255,255,255,0.18)' : 'transparent'}; color: ${st.wpMode === 'video' ? '#ffffff' : '#a1a1aa'}; font-weight: ${st.wpMode === 'video' ? '600' : '400'};">Live Video</button>
               </div>
               <label style="padding: 5px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.08); border: 1px solid ${mainTheme.borderColor}; color: #f4f4f5; font-size: 12px; cursor: pointer; white-space: nowrap;">
-                Chọn Ảnh / Video
+                Choose Image / Video
                 <input id="agy-wp-upload" type="file" accept="image/*,video/mp4,video/webm,video/quicktime,video/*" style="display: none;" />
               </label>
               <button id="agy-export-btn" type="button" style="padding: 5px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); color: #f4f4f5; font-size: 12px; cursor: pointer; white-space: nowrap;">
@@ -3091,59 +3091,59 @@
               </label>
               <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #d4d4d8; cursor: pointer;">
                 <input id="agy-sketch-toggle" type="checkbox" ${st.sketchReveal ? 'checked' : ''} style="accent-color: ${mainTheme.primary}; cursor: pointer;" />
-                Vẽ nét → Loang màu
+                Sketch → Color Bloom
               </label>
               <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #d4d4d8; cursor: pointer;">
                 <input id="agy-greeting-toggle" type="checkbox" ${st.tawaGreeting ? 'checked' : ''} style="accent-color: ${mainTheme.primary}; cursor: pointer;" />
-                Câu chào Custom
+                Custom Greeting
               </label>
               <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #d4d4d8; cursor: pointer;">
                 <input id="agy-task-voice-toggle" type="checkbox" ${st.taskVoiceEnabled ? 'checked' : ''} style="accent-color: ${mainTheme.primary}; cursor: pointer;" />
-                Voice xong Task
+                Task Done Voice
               </label>
               <span id="agy-upload-status" style="font-size: 11.5px; color: #93c5fd;"></span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <button id="agy-custom-vg-toggle" type="button" style="padding: 4px 10px; border-radius: 7px; background: rgba(255,255,255,0.08); border: 1px solid ${mainTheme.borderColor}; color: #e4e4e7; font-size: 11.5px; cursor: pointer;">
-                Tùy chỉnh Voice &amp; Câu chào ▾
+                Customize Voice &amp; Greeting ▾
               </button>
               <button id="agy-replay-boot-btn" type="button" style="padding: 4px 10px; border-radius: 7px; background: rgba(255,255,255,0.08); border: 1px solid ${mainTheme.borderColor}; color: #e4e4e7; font-size: 11.5px; cursor: pointer;">
                 Replay Intro
               </button>
               <button id="agy-replay-reveal-btn" type="button" style="padding: 4px 10px; border-radius: 7px; background: rgba(255,255,255,0.08); border: 1px solid ${mainTheme.borderColor}; color: #e4e4e7; font-size: 11.5px; cursor: pointer;">
-                Replay Vẽ Nền
+                Replay Reveal
               </button>
             </div>
           </div>
           <div id="agy-custom-vg-box" style="display: none; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
             <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px;">
               <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span style="font-size: 12.5px; font-weight: 600; color: #f4f4f5;">Voice báo xong Task (Random)</span>
+                <span style="font-size: 12.5px; font-weight: 600; color: #f4f4f5;">Task Completion Voice (Random)</span>
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <button id="agy-task-voice-test" type="button" title="Nghe thử ngẫu nhiên" style="padding: 4px 8px; border-radius: 7px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #e4e4e7; font-size: 11.5px; cursor: pointer;">🎲 Test</button>
+                  <button id="agy-task-voice-test" type="button" title="Play random sample" style="padding: 4px 8px; border-radius: 7px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #e4e4e7; font-size: 11.5px; cursor: pointer;">🎲 Test</button>
                   <label style="padding: 4px 9px; border-radius: 7px; background: rgba(255, 255, 255, 0.08); border: 1px solid ${mainTheme.borderColor}; color: #f4f4f5; font-size: 11.5px; cursor: pointer; white-space: nowrap;">
-                    Thêm Voice
+                    Add Voice
                     <input id="agy-task-voice-upload" type="file" multiple accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.flac" style="display: none;" />
                   </label>
                 </div>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 11.5px; color: #a1a1aa;">Âm lượng</span>
+                <span style="font-size: 11.5px; color: #a1a1aa;">Volume</span>
                 <input id="agy-task-voice-vol" type="range" min="0" max="100" value="${st.taskVoiceVol}" style="flex: 1; cursor: pointer; accent-color: ${mainTheme.primary}; height: 5px;" />
                 <span id="agy-task-voice-vol-val" style="min-width: 34px; text-align: right; font-size: 11.5px; color: #d4d4d8;">${st.taskVoiceVol}%</span>
               </div>
               <div id="agy-task-voice-list" style="display: flex; flex-direction: column; gap: 5px; max-height: 112px; overflow-y: auto;"></div>
-              <div style="font-size: 11px; color: #71717a;">Chỉ tạo Audio khi tác vụ vừa xong rồi tự hủy (0 MB RAM khi rảnh).</div>
+              <div style="font-size: 11px; color: #71717a;">Creates Audio only on task completion and auto-disposes (0 MB RAM when idle).</div>
             </div>
             <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px;">
               <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-                <span style="font-size: 12.5px; font-weight: 600; color: #f4f4f5;">Câu chào Custom (mỗi dòng 1 câu)</span>
+                <span style="font-size: 12.5px; font-weight: 600; color: #f4f4f5;">Custom Greetings (1 per line)</span>
                 <span id="agy-greeting-msg" style="font-size: 11px; color: #93c5fd;"></span>
               </div>
-              <textarea id="agy-greeting-lines" rows="4" placeholder="Nhập câu chào riêng của bạn (mỗi dòng 1 câu)..." style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.38); color: #f4f4f5; border: 1px solid ${mainTheme.borderColor}; border-radius: 7px; padding: 7px 9px; font-size: 12px; resize: vertical; line-height: 1.45;">${escapeHtml((st.customGreetings || []).join('\n'))}</textarea>
+              <textarea id="agy-greeting-lines" rows="4" placeholder="Enter your custom greetings (one per line)..." style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.38); color: #f4f4f5; border: 1px solid ${mainTheme.borderColor}; border-radius: 7px; padding: 7px 9px; font-size: 12px; resize: vertical; line-height: 1.45;">${escapeHtml((st.customGreetings || []).join('\n'))}</textarea>
               <div style="display: flex; justify-content: flex-end; gap: 8px;">
-                <button id="agy-greeting-reset" type="button" style="padding: 4px 10px; border-radius: 7px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: #d4d4d8; font-size: 11.5px; cursor: pointer;">Xóa hết</button>
-                <button id="agy-greeting-save" type="button" style="padding: 4px 12px; border-radius: 7px; background: ${mainTheme.primary}; color: #090d16; font-weight: 600; font-size: 11.5px; border: none; cursor: pointer;">Lưu câu chào</button>
+                <button id="agy-greeting-reset" type="button" style="padding: 4px 10px; border-radius: 7px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: #d4d4d8; font-size: 11.5px; cursor: pointer;">Clear All</button>
+                <button id="agy-greeting-save" type="button" style="padding: 4px 12px; border-radius: 7px; background: ${mainTheme.primary}; color: #090d16; font-weight: 600; font-size: 11.5px; border: none; cursor: pointer;">Save Greetings</button>
               </div>
             </div>
           </div>
@@ -3353,7 +3353,7 @@
         syncModeButtons('video');
         if (wpToggle) wpToggle.checked = true;
         if (uploadStatus) {
-          uploadStatus.textContent = hasVid ? '' : 'Hãy chọn Furina Live hoặc một Video đã lưu bên dưới';
+          uploadStatus.textContent = hasVid ? '' : 'Select a Live Video preset or a saved video below';
         }
         renderPresetsSection();
       });
@@ -3451,7 +3451,7 @@
       if (!file) return;
       const isVideo = (file.type && file.type.startsWith('video/')) || /\.(mp4|webm|mov|m4v)$/i.test(file.name || '');
       const kind = isVideo ? 'video' : 'image';
-      if (uploadStatus) uploadStatus.textContent = isVideo ? 'Đang nạp video...' : 'Đang nạp ảnh nền...';
+      if (uploadStatus) uploadStatus.textContent = isVideo ? 'Loading video...' : 'Loading wallpaper...';
 
       const uploaded = await uploadMediaToServer(file, isVideo ? 'custom.mp4' : 'custom.png');
       let mediaUrl = uploaded && uploaded.url ? uploaded.url : '';
@@ -3472,7 +3472,7 @@
 
       wpUpload.value = '';
       if (!mediaUrl) {
-        if (uploadStatus) uploadStatus.textContent = 'Không đọc được tệp đã chọn!';
+        if (uploadStatus) uploadStatus.textContent = 'Failed to read selected file!';
         return;
       }
 
@@ -3485,11 +3485,11 @@
       if (isVideo) {
         applyTheme({ wpMode: 'video', customVideo: mediaUrl, savedVideos: nextList, wpEnabled: true });
         syncModeButtons('video');
-        if (uploadStatus) uploadStatus.textContent = uploaded && uploaded.duplicate ? 'Đã chọn lại video đã lưu!' : 'Đã lưu & cập nhật video nền!';
+        if (uploadStatus) uploadStatus.textContent = uploaded && uploaded.duplicate ? 'Selected existing saved video!' : 'Saved & updated video wallpaper!';
       } else {
         applyTheme({ wpMode: 'image', customWp: mediaUrl, savedImages: nextList, wpEnabled: true });
         syncModeButtons('image');
-        if (uploadStatus) uploadStatus.textContent = uploaded && uploaded.duplicate ? 'Đã chọn lại ảnh đã lưu!' : 'Đã lưu & cập nhật ảnh nền!';
+        if (uploadStatus) uploadStatus.textContent = uploaded && uploaded.duplicate ? 'Selected existing saved image!' : 'Saved & updated image wallpaper!';
       }
       if (wpToggle) wpToggle.checked = true;
       renderPresetsSection();
@@ -3740,15 +3740,15 @@
       if (!taskVoiceListEl) return;
       const voices = getMediaLibrary('audio');
       if (voices.length === 0) {
-        taskVoiceListEl.innerHTML = `<div style="font-size: 11.5px; color: #71717a; padding: 6px 2px;">Chưa có file voice nào. Bấm "Thêm Voice" để nạp 1 hoặc nhiều file .mp3/.wav/.ogg/.m4a.</div>`;
+        taskVoiceListEl.innerHTML = `<div style="font-size: 11.5px; color: #71717a; padding: 6px 2px;">No voice files yet. Click "Add Voice" to upload one or more .mp3/.wav/.ogg/.m4a files.</div>`;
         return;
       }
       taskVoiceListEl.innerHTML = voices.map((v, idx) => `
         <div style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.03);">
           <span style="font-size: 10.5px; color: #93c5fd; min-width: 16px;">#${idx + 1}</span>
           <span style="flex: 1; font-size: 11.5px; color: #e4e4e7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(v.name)}">${escapeHtml(v.name)}</span>
-          <button type="button" class="agy-tv-play-btn" data-url="${escapeHtml(v.url)}" title="Nghe thử" style="padding: 2px 6px; border-radius: 5px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #e4e4e7; font-size: 10.5px; cursor: pointer;">▶</button>
-          <button type="button" class="agy-tv-del-btn" data-url="${escapeHtml(v.url)}" title="Xóa voice" style="padding: 2px 6px; border-radius: 5px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.28); color: #fca5a5; font-size: 10.5px; cursor: pointer;">✕</button>
+          <button type="button" class="agy-tv-play-btn" data-url="${escapeHtml(v.url)}" title="Preview" style="padding: 2px 6px; border-radius: 5px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #e4e4e7; font-size: 10.5px; cursor: pointer;">▶</button>
+          <button type="button" class="agy-tv-del-btn" data-url="${escapeHtml(v.url)}" title="Delete voice" style="padding: 2px 6px; border-radius: 5px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.28); color: #fca5a5; font-size: 10.5px; cursor: pointer;">✕</button>
         </div>
       `).join('');
 
@@ -3787,7 +3787,7 @@
       taskVoiceUpload.addEventListener('change', async (e) => {
         const files = Array.from((e.target && e.target.files) || []);
         if (files.length === 0) return;
-        if (uploadStatus) uploadStatus.textContent = `Đang nạp ${files.length} voice...`;
+        if (uploadStatus) uploadStatus.textContent = `Loading ${files.length} voice(s)...`;
         let nextVoices = getMediaLibrary('audio');
         for (const file of files) {
           const uploaded = await uploadMediaToServer(file, 'task_voice.mp3');
@@ -3808,7 +3808,7 @@
         taskVoiceUpload.value = '';
         applyTheme({ taskVoices: nextVoices, taskVoiceEnabled: true });
         if (taskVoiceToggle) taskVoiceToggle.checked = true;
-        if (uploadStatus) uploadStatus.textContent = `Đã thêm ${files.length} voice (${nextVoices.length} tổng)!`;
+        if (uploadStatus) uploadStatus.textContent = `Added ${files.length} voice(s) (${nextVoices.length} total)!`;
         renderTaskVoiceList();
       });
     }
@@ -3817,7 +3817,7 @@
       customVgToggle.addEventListener('click', () => {
         const isHidden = customVgBox.style.display === 'none';
         customVgBox.style.display = isHidden ? 'grid' : 'none';
-        customVgToggle.textContent = isHidden ? 'Tùy chỉnh Voice & Câu chào ▴' : 'Tùy chỉnh Voice & Câu chào ▾';
+        customVgToggle.textContent = isHidden ? 'Customize Voice & Greeting ▴' : 'Customize Voice & Greeting ▾';
       });
     }
     if (greetingSaveBtn && greetingLinesEl) {
@@ -3828,7 +3828,7 @@
         window.__AGY_GREETING_NEED_FRESH__ = true;
         syncEmptyGreeting();
         if (greetingMsgEl) {
-          greetingMsgEl.textContent = lines.length > 0 ? `Đã lưu (${lines.length} câu)` : 'Đã xóa câu chào custom';
+          greetingMsgEl.textContent = lines.length > 0 ? `Saved (${lines.length} greeting${lines.length > 1 ? 's' : ''})` : 'Cleared custom greetings';
           setTimeout(() => { if (greetingMsgEl) greetingMsgEl.textContent = ''; }, 2000);
         }
       });
@@ -3840,7 +3840,7 @@
         window.__AGY_GREETING_NEED_FRESH__ = true;
         syncEmptyGreeting();
         if (greetingMsgEl) {
-          greetingMsgEl.textContent = 'Đã xóa danh sách câu chào';
+          greetingMsgEl.textContent = 'Cleared greeting list';
           setTimeout(() => { if (greetingMsgEl) greetingMsgEl.textContent = ''; }, 2000);
         }
       });
@@ -3876,7 +3876,7 @@
       }
       applyTheme(patch);
       if (uploadStatus) {
-        uploadStatus.textContent = isVideo ? 'Đã xóa video khỏi thư viện!' : (isAudio ? 'Đã xóa voice khỏi danh sách!' : 'Đã xóa ảnh khỏi thư viện!');
+        uploadStatus.textContent = isVideo ? 'Removed video from library!' : (isAudio ? 'Removed voice from list!' : 'Removed image from library!');
       }
       if (isAudio) {
         renderTaskVoiceList();
@@ -3900,7 +3900,7 @@
 
       const headerBadge = document.getElementById('agy-custom-theme-badge');
       if (headerBadge) {
-        headerBadge.textContent = `${totalCount} ${isVideoTab ? 'Video' : 'Ảnh'}`;
+        headerBadge.textContent = `${totalCount} ${isVideoTab ? 'Video' : 'Image'}${totalCount !== 1 ? 's' : ''}`;
       }
 
       const builtInHtml = builtInKeys.map((name) => {
@@ -3935,7 +3935,7 @@
           : isSameMediaUrl(curSt.customWp, item.url);
         const displayName = item.name || deriveMediaName(item.url, isVideoTab ? 'Saved Video' : 'Saved Image');
         const deleteBtnHtml = `
-          <button type="button" class="agy-saved-delete-btn" data-url="${escapeHtml(item.url)}" title="Xóa khỏi thư viện" style="position: absolute; top: 8px; right: 8px; z-index: 4; width: 24px; height: 24px; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.22); background: rgba(10, 12, 18, 0.72); color: #fca5a5; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: background-color 0.15s ease, border-color 0.15s ease;">
+          <button type="button" class="agy-saved-delete-btn" data-url="${escapeHtml(item.url)}" title="Remove from library" style="position: absolute; top: 8px; right: 8px; z-index: 4; width: 24px; height: 24px; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.22); background: rgba(10, 12, 18, 0.72); color: #fca5a5; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: background-color 0.15s ease, border-color 0.15s ease;">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
           </button>
         `;
@@ -3947,7 +3947,7 @@
           `
           : `
             <div style="position: absolute; inset: 0; background-image: linear-gradient(180deg, rgba(0,0,0,0.12), rgba(14,12,12,0.86)), url('${sanitizeCssUrl(resolvedUrl)}'); background-size: cover; background-position: center; pointer-events: none;"></div>
-            <span style="position: absolute; top: 8px; left: 10px; z-index: 3; font-size: 10px; font-weight: 600; letter-spacing: 0.4px; padding: 2px 6px; border-radius: 9999px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(251, 191, 36, 0.35); color: #fde68a;">ẢNH</span>
+            <span style="position: absolute; top: 8px; left: 10px; z-index: 3; font-size: 10px; font-weight: 600; letter-spacing: 0.4px; padding: 2px 6px; border-radius: 9999px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(251, 191, 36, 0.35); color: #fde68a;">IMAGE</span>
           `;
 
         return `
@@ -3958,7 +3958,7 @@
               <span style="position: relative; z-index: 3; font-size: 13px; font-weight: 600; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.85); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;">${escapeHtml(displayName)}</span>
             </div>
             <div style="padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 12px; color: #a1a1aa;">${isVideoTab ? 'Video đã lưu' : 'Ảnh tĩnh đã lưu'}</span>
+              <span style="font-size: 12px; color: #a1a1aa;">${isVideoTab ? 'Saved Video' : 'Saved Static Image'}</span>
               <div class="agy-card-check-slot">${isSelected ? CHECK_SVG : ''}</div>
             </div>
           </div>
@@ -3966,8 +3966,8 @@
       }).join('');
 
       host.innerHTML = `
-        <div style="font-size: 15px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">Theme Presets — ${isVideoTab ? 'Video động' : 'Ảnh tĩnh'} (${totalCount})</div>
-        <div style="font-size: 12.5px; color: #a1a1aa; margin-bottom: 14px;">${isVideoTab ? 'Live wallpaper mặc định & toàn bộ video nền bạn đã từng chọn.' : 'Preset tĩnh mặc định & toàn bộ ảnh nền bạn đã từng chọn.'}</div>
+        <div style="font-size: 15px; font-weight: 600; color: #ffffff; margin-bottom: 4px;">Theme Presets — ${isVideoTab ? 'Live Video' : 'Static Image'} (${totalCount})</div>
+        <div style="font-size: 12.5px; color: #a1a1aa; margin-bottom: 14px;">${isVideoTab ? 'Built-in live wallpapers & all video backgrounds you have selected.' : 'Built-in static presets & all image wallpapers you have selected.'}</div>
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
           ${builtInHtml}
           ${savedHtml}
@@ -4108,11 +4108,16 @@
   function injectMainSidebarButton() {
     if (document.getElementById('agy-custom-theme-sidebar-btn')) return;
 
-    const sidebar = document.querySelector('.bg-sidebar');
-    if (!sidebar) return;
+    const sidebars = Array.from(document.querySelectorAll('.bg-sidebar'));
+    if (!sidebars.length) return;
 
-    const spans = Array.from(sidebar.querySelectorAll('span'));
-    const customSpan = spans.find(s => s.textContent?.trim() === 'Customizations');
+    let customSpan = null;
+    for (const sidebar of sidebars) {
+      customSpan = Array.from(sidebar.querySelectorAll('span')).find(
+        s => s.textContent?.trim() === 'Customizations'
+      );
+      if (customSpan) break;
+    }
     if (!customSpan) return;
 
     const row = customSpan.closest('a, button, div[role="button"], .group\\/headerbtn') || customSpan.parentElement;
