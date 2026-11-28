@@ -144,10 +144,6 @@ def build_payload(themes_path: Path, engine_path: Path, out_path: Path, max_dim:
         candidates = {
             "starfieldBg": assets_dir / "starfield-boot-bg.jpg",
             "agyColorIcon": assets_dir / "agy-icon-color.png",
-            "voice1": assets_dir / "voice" / "tawa_voice1.mp3",
-            "voice2": assets_dir / "voice" / "tawa_voice2.mp3",
-            "voice3": assets_dir / "voice" / "tawa_voice3.mp3",
-            "voice4": assets_dir / "voice" / "tawa_voice4.mp3",
             "greetingFontVi": assets_dir / "fonts" / "mali-500-vi.woff2",
             "greetingFontLatinExt": assets_dir / "fonts" / "mali-500-latin-ext.woff2",
             "greetingFontLatin": assets_dir / "fonts" / "mali-500-latin.woff2",
@@ -161,8 +157,6 @@ def build_payload(themes_path: Path, engine_path: Path, out_path: Path, max_dim:
                 elif suffix == ".woff2":
                     b64 = base64.b64encode(path.read_bytes()).decode("ascii")
                     boot_assets[key] = f"data:font/woff2;base64,{b64}"
-                else:
-                    boot_assets[key] = encode_binary_data_uri(path, "audio/mpeg")
         compiled = compiled.replace(
             BOOT_ASSETS_PLACEHOLDER,
             json.dumps(boot_assets, ensure_ascii=False),

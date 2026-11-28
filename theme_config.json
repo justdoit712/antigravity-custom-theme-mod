@@ -11,34 +11,25 @@
     {
       "url": "user_media/REI_4K_Wallpaper.png",
       "name": "REI_4K_Wallpaper.png",
-      "addedAt": 1795521940143
-    },
-    {
-      "url": "user_media/Ekko_and_Powder_Arcane_4K.png",
-      "name": "Ekko_and_Powder_Arcane_4K.png",
-      "addedAt": 1795521939143
-    },
-    {
-      "url": "user_media/Ekko_Alone_Arcane_4K.png",
-      "name": "Ekko_Alone_Arcane_4K.png",
-      "addedAt": 1795521938143
+      "addedAt": 1795852689013
     },
     {
       "url": "user_media/Eye_of_the_Storm_2K.jpg",
       "name": "Eye_of_the_Storm_2K.jpg",
-      "addedAt": 1795521937143
+      "addedAt": 1795852688993
+    },
+    {
+      "url": "user_media/Ekko_and_Powder_Arcane_4K.png",
+      "name": "Ekko_and_Powder_Arcane_4K.png",
+      "addedAt": 1795852688980
+    },
+    {
+      "url": "user_media/Ekko_Alone_Arcane_4K.png",
+      "name": "Ekko_Alone_Arcane_4K.png",
+      "addedAt": 1795852688962
     }
   ],
   "savedVideos": [],
-  "taskVoices": [
-    {
-      "url": "user_media/1795011944060_Tawa_voice_task_1.mp3",
-      "name": "Tawa_voice_task_1.mp3",
-      "addedAt": 1795161255375
-    }
-  ],
-  "taskVoiceEnabled": true,
-  "taskVoiceVol": 85,
   "customGreetings": [],
   "userAvatar": "",
   "agentAvatar": "",

@@ -14,9 +14,6 @@
   const STORAGE_CUSTOM_VIDEO = 'agy_custom_video_v3';
   const STORAGE_SAVED_IMAGES = 'agy_saved_images_v3';
   const STORAGE_SAVED_VIDEOS = 'agy_saved_videos_v3';
-  const STORAGE_TASK_VOICES = 'agy_task_voices_v3';
-  const STORAGE_TASK_VOICE_ENABLED = 'agy_task_voice_enabled_v3';
-  const STORAGE_TASK_VOICE_VOL = 'agy_task_voice_vol_v3';
   const STORAGE_CUSTOM_GREETINGS = 'agy_custom_greetings_v3';
   const STORAGE_USER_AVATAR = 'agy_user_avatar_v3';
   const STORAGE_AGENT_AVATAR = 'agy_agent_avatar_v3';
@@ -129,16 +126,6 @@
         activeStorageKey: STORAGE_CUSTOM_VIDEO,
         activeInitKey: 'customVideo',
         fallbackLabel: 'Custom Video'
-      };
-    }
-    if (kind === 'audio') {
-      return {
-        bucket: 'audios',
-        storageKey: STORAGE_TASK_VOICES,
-        initListKey: 'taskVoices',
-        activeStorageKey: '',
-        activeInitKey: '',
-        fallbackLabel: 'Task Voice'
       };
     }
     return {
@@ -291,14 +278,6 @@
     const customVideo = rawCustomVid !== null ? rawCustomVid : (init.customVideo || '');
     const savedImages = getMediaLibrary('image', init, customWp);
     const savedVideos = getMediaLibrary('video', init, customVideo);
-    const taskVoices = getMediaLibrary('audio', init, '');
-    const taskVoiceEnabled = localStorage.getItem(STORAGE_TASK_VOICE_ENABLED) !== null
-      ? localStorage.getItem(STORAGE_TASK_VOICE_ENABLED) !== 'false'
-      : (init.taskVoiceEnabled !== undefined ? init.taskVoiceEnabled : true);
-    const rawTaskVol = localStorage.getItem(STORAGE_TASK_VOICE_VOL) ?? init.taskVoiceVol;
-    const taskVoiceVol = rawTaskVol !== undefined && rawTaskVol !== null && rawTaskVol !== ''
-      ? Math.max(0, Math.min(100, parseInt(rawTaskVol, 10)))
-      : 85;
     const customGreetings = readCustomGreetings(init);
     const userAvatar = localStorage.getItem(STORAGE_USER_AVATAR) ?? init.userAvatar ?? '';
     const agentAvatar = localStorage.getItem(STORAGE_AGENT_AVATAR) ?? init.agentAvatar ?? '';
@@ -320,7 +299,7 @@
     return {
       themeName, bubbleName, inputStyle, dimming, wpEnabled, wpMode,
       customWp, customVideo, savedImages, savedVideos,
-      taskVoices, taskVoiceEnabled, taskVoiceVol, customGreetings,
+      customGreetings,
       userAvatar, agentAvatar, glassBlur, avatarSize, avatarRadius,
       bootIntro, sketchReveal, tawaGreeting
     };
@@ -1355,7 +1334,7 @@
     }
   }
 
-  // ==================== MONOCHROME STARFIELD BOOT HUD + ARISU-TAWA VOICE ====================
+  // ==================== MONOCHROME STARFIELD BOOT HUD ====================
   function clearBootTimers() {
     if (Array.isArray(window.__AGY_BOOT_TIMERS__)) {
       window.__AGY_BOOT_TIMERS__.forEach((id) => clearTimeout(id));
@@ -1375,22 +1354,8 @@
     }
   }
 
-  function stopBootAudio() {
-    if (window.__AGY_BOOT_AUDIO__) {
-      try {
-        window.__AGY_BOOT_AUDIO__.pause();
-        window.__AGY_BOOT_AUDIO__.currentTime = 0;
-      } catch (e) {}
-      window.__AGY_BOOT_AUDIO__ = null;
-    }
-    try {
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-    } catch (e) {}
-  }
-
   function teardownBootOverlay() {
     clearBootTimers();
-    stopBootAudio();
     const ov = document.getElementById('agy-boot-overlay');
     if (ov) ov.remove();
     const fl = document.getElementById('agy-flash-curtain');
@@ -1409,12 +1374,6 @@
 
     const starfieldUrl = sanitizeCssUrl(BOOT_ASSETS.starfieldBg || resolveMediaUrl('assets/starfield-boot-bg.jpg'));
     const iconColorUrl = BOOT_ASSETS.agyColorIcon || resolveMediaUrl('assets/agy-icon-color.png');
-    const voiceUrls = {
-      1: BOOT_ASSETS.voice1 || resolveMediaUrl('assets/voice/tawa_voice1.mp3'),
-      2: BOOT_ASSETS.voice2 || resolveMediaUrl('assets/voice/tawa_voice2.mp3'),
-      3: BOOT_ASSETS.voice3 || resolveMediaUrl('assets/voice/tawa_voice3.mp3'),
-      4: BOOT_ASSETS.voice4 || resolveMediaUrl('assets/voice/tawa_voice4.mp3')
-    };
 
     const bootStyle = document.createElement('style');
     bootStyle.id = 'agy-boot-styles';
@@ -1776,38 +1735,7 @@
     outlinePath.style.strokeDashoffset = `${outlineTotalLen}`;
 
     let currentStage = 0;
-    let bootActx = null;
     const bootStartMs = performance.now();
-
-    function playClickSfx(freq = 640, dur = 0.06, vol = 0.045) {
-      try {
-        bootActx = bootActx || new (window.AudioContext || window.webkitAudioContext)();
-        if (bootActx.state === 'suspended') bootActx.resume();
-        const osc = bootActx.createOscillator();
-        const g = bootActx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, bootActx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(freq * 1.45, bootActx.currentTime + dur);
-        g.gain.setValueAtTime(vol, bootActx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, bootActx.currentTime + dur);
-        osc.connect(g);
-        g.connect(bootActx.destination);
-        osc.start();
-        osc.stop(bootActx.currentTime + dur);
-      } catch (e) {}
-    }
-
-    function playTawaVoice(slotNum) {
-      stopBootAudio();
-      const src = voiceUrls[slotNum];
-      if (!src) return;
-      try {
-        const audio = new Audio(src);
-        audio.volume = 0.92;
-        window.__AGY_BOOT_AUDIO__ = audio;
-        audio.play().catch(() => {});
-      } catch (e) {}
-    }
 
     function triggerScanline() {
       hudScanline.classList.remove('sweep');
@@ -1891,7 +1819,6 @@
       startHexStream(false);
       window.__AGY_BOOT_FINISHED__ = true;
       if (instant) {
-        stopBootAudio();
         overlay.classList.add('done', 'instant');
         scheduleRevealWhenReady(false);
         return;
@@ -1922,7 +1849,6 @@
       showStage(3, true);
       void outlinePath.offsetWidth;
       outlinePath.classList.add('trace');
-      playClickSfx(520, 0.06, 0.045);
 
       let fillPhaseStarted = false;
       const startColorFillStage = () => {
@@ -1938,7 +1864,6 @@
         startHexStream(true);
         void colorFillImg.offsetWidth;
         colorFillImg.classList.add('filled');
-        playClickSfx(620, 0.05, 0.04);
 
         window.__AGY_BOOT_TIMERS__.push(setTimeout(() => iconOutlineSvg.classList.add('fade-stroke'), 520));
 
@@ -1946,8 +1871,6 @@
           startHexStream(false);
           showStage(5, true);
           triggerScanline();
-          playClickSfx(780, 0.08, 0.05);
-          playTawaVoice(3);
         }, 1250));
 
         window.__AGY_BOOT_TIMERS__.push(setTimeout(() => {
@@ -1957,8 +1880,6 @@
 
         window.__AGY_BOOT_TIMERS__.push(setTimeout(() => {
           showStage(6, true);
-          playClickSfx(880, 0.1, 0.045);
-          playTawaVoice(4);
         }, 3620));
 
         window.__AGY_BOOT_TIMERS__.push(setTimeout(() => finishBoot(false), 5850));
@@ -1991,8 +1912,6 @@
     document.getElementById('agy-btn-grant').addEventListener('click', (e) => {
       if (currentStage !== 1) return;
       e.currentTarget.classList.add('triggered');
-      playClickSfx(680, 0.06, 0.05);
-      playTawaVoice(1);
       const st1 = document.getElementById('agy-stage-1');
       window.__AGY_BOOT_TIMERS__.push(setTimeout(() => st1 && st1.classList.add('wipe-out'), 240));
       window.__AGY_BOOT_TIMERS__.push(setTimeout(() => showStage(2, true), 580));
@@ -2001,8 +1920,6 @@
     document.getElementById('agy-btn-confirm').addEventListener('click', (e) => {
       if (currentStage !== 2) return;
       e.currentTarget.classList.add('triggered');
-      playClickSfx(820, 0.06, 0.05);
-      playTawaVoice(2);
       const st2 = document.getElementById('agy-stage-2');
       window.__AGY_BOOT_TIMERS__.push(setTimeout(() => st2 && st2.classList.add('wipe-out'), 240));
       window.__AGY_BOOT_TIMERS__.push(setTimeout(() => runAutoSequenceAfterConfirm(), 580));
@@ -2088,15 +2005,6 @@
       }
       if (overrides.savedVideos !== undefined) {
         localStorage.setItem(STORAGE_SAVED_VIDEOS, JSON.stringify(st.savedVideos));
-      }
-      if (overrides.taskVoices !== undefined) {
-        localStorage.setItem(STORAGE_TASK_VOICES, JSON.stringify(st.taskVoices));
-      }
-      if (overrides.taskVoiceEnabled !== undefined) {
-        localStorage.setItem(STORAGE_TASK_VOICE_ENABLED, String(st.taskVoiceEnabled));
-      }
-      if (overrides.taskVoiceVol !== undefined) {
-        localStorage.setItem(STORAGE_TASK_VOICE_VOL, String(st.taskVoiceVol));
       }
       if (overrides.customGreetings !== undefined) {
         localStorage.setItem(STORAGE_CUSTOM_GREETINGS, JSON.stringify(st.customGreetings));
@@ -2921,11 +2829,6 @@
     clearTitleBarTimers();
     clearRevealRaf();
     teardownBootOverlay();
-    stopTaskAudio();
-    if (window.__AGY_TASK_COMPLETE_TIMER__) {
-      clearTimeout(window.__AGY_TASK_COMPLETE_TIMER__);
-      window.__AGY_TASK_COMPLETE_TIMER__ = null;
-    }
     if (window.__AGY_MODAL_OBSERVER__) {
       try { window.__AGY_MODAL_OBSERVER__.disconnect(); } catch (e) {}
       window.__AGY_MODAL_OBSERVER__ = null;
@@ -3087,7 +2990,7 @@
             <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
               <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #d4d4d8; cursor: pointer;">
                 <input id="agy-boot-toggle" type="checkbox" ${st.bootIntro ? 'checked' : ''} style="accent-color: ${mainTheme.primary}; cursor: pointer;" />
-                Boot Intro + Tawa Voice
+                Boot Intro
               </label>
               <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #d4d4d8; cursor: pointer;">
                 <input id="agy-sketch-toggle" type="checkbox" ${st.sketchReveal ? 'checked' : ''} style="accent-color: ${mainTheme.primary}; cursor: pointer;" />
@@ -3097,15 +3000,11 @@
                 <input id="agy-greeting-toggle" type="checkbox" ${st.tawaGreeting ? 'checked' : ''} style="accent-color: ${mainTheme.primary}; cursor: pointer;" />
                 Custom Greeting
               </label>
-              <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #d4d4d8; cursor: pointer;">
-                <input id="agy-task-voice-toggle" type="checkbox" ${st.taskVoiceEnabled ? 'checked' : ''} style="accent-color: ${mainTheme.primary}; cursor: pointer;" />
-                Task Done Voice
-              </label>
               <span id="agy-upload-status" style="font-size: 11.5px; color: #93c5fd;"></span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <button id="agy-custom-vg-toggle" type="button" style="padding: 4px 10px; border-radius: 7px; background: rgba(255,255,255,0.08); border: 1px solid ${mainTheme.borderColor}; color: #e4e4e7; font-size: 11.5px; cursor: pointer;">
-                Customize Voice &amp; Greeting ▾
+                Customize Greeting ▾
               </button>
               <button id="agy-replay-boot-btn" type="button" style="padding: 4px 10px; border-radius: 7px; background: rgba(255,255,255,0.08); border: 1px solid ${mainTheme.borderColor}; color: #e4e4e7; font-size: 11.5px; cursor: pointer;">
                 Replay Intro
@@ -3115,26 +3014,7 @@
               </button>
             </div>
           </div>
-          <div id="agy-custom-vg-box" style="display: none; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
-            <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span style="font-size: 12.5px; font-weight: 600; color: #f4f4f5;">Task Completion Voice (Random)</span>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <button id="agy-task-voice-test" type="button" title="Play random sample" style="padding: 4px 8px; border-radius: 7px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #e4e4e7; font-size: 11.5px; cursor: pointer;">🎲 Test</button>
-                  <label style="padding: 4px 9px; border-radius: 7px; background: rgba(255, 255, 255, 0.08); border: 1px solid ${mainTheme.borderColor}; color: #f4f4f5; font-size: 11.5px; cursor: pointer; white-space: nowrap;">
-                    Add Voice
-                    <input id="agy-task-voice-upload" type="file" multiple accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.flac" style="display: none;" />
-                  </label>
-                </div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 11.5px; color: #a1a1aa;">Volume</span>
-                <input id="agy-task-voice-vol" type="range" min="0" max="100" value="${st.taskVoiceVol}" style="flex: 1; cursor: pointer; accent-color: ${mainTheme.primary}; height: 5px;" />
-                <span id="agy-task-voice-vol-val" style="min-width: 34px; text-align: right; font-size: 11.5px; color: #d4d4d8;">${st.taskVoiceVol}%</span>
-              </div>
-              <div id="agy-task-voice-list" style="display: flex; flex-direction: column; gap: 5px; max-height: 112px; overflow-y: auto;"></div>
-              <div style="font-size: 11px; color: #71717a;">Creates Audio only on task completion and auto-disposes (0 MB RAM when idle).</div>
-            </div>
+          <div id="agy-custom-vg-box" style="display: none; grid-template-columns: 1fr; gap: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
             <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px;">
               <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
                 <span style="font-size: 12.5px; font-weight: 600; color: #f4f4f5;">Custom Greetings (1 per line)</span>
@@ -3623,7 +3503,7 @@
             throw new Error('Config must be a JSON object');
           }
           const allowed = {};
-          const keys = ['themeName', 'bubbleName', 'inputStyle', 'dimming', 'wpEnabled', 'wpMode', 'customWp', 'customVideo', 'savedImages', 'savedVideos', 'taskVoices', 'taskVoiceEnabled', 'taskVoiceVol', 'customGreetings', 'userAvatar', 'agentAvatar', 'glassBlur', 'avatarSize', 'avatarRadius', 'bootIntro', 'sketchReveal', 'tawaGreeting'];
+          const keys = ['themeName', 'bubbleName', 'inputStyle', 'dimming', 'wpEnabled', 'wpMode', 'customWp', 'customVideo', 'savedImages', 'savedVideos', 'customGreetings', 'userAvatar', 'agentAvatar', 'glassBlur', 'avatarSize', 'avatarRadius', 'bootIntro', 'sketchReveal', 'tawaGreeting'];
           keys.forEach((k) => {
             if (parsed[k] !== undefined) allowed[k] = parsed[k];
           });
@@ -3653,8 +3533,6 @@
       localStorage.removeItem(STORAGE_BOOT_INTRO);
       localStorage.removeItem(STORAGE_SKETCH_REVEAL);
       localStorage.removeItem(STORAGE_TAWA_GREETING);
-      localStorage.removeItem(STORAGE_TASK_VOICE_ENABLED);
-      localStorage.removeItem(STORAGE_TASK_VOICE_VOL);
       localStorage.removeItem(STORAGE_CUSTOM_GREETINGS);
       const defTh = THEMES[DEFAULT_THEME_KEY] || {};
       const defMode = defTh.wallpaperVideo ? 'video' : 'image';
@@ -3667,8 +3545,6 @@
         wpMode: defMode,
         customWp: '',
         customVideo: '',
-        taskVoiceEnabled: true,
-        taskVoiceVol: 85,
         customGreetings: [],
         userAvatar: '',
         agentAvatar: '',
@@ -3683,11 +3559,7 @@
       if (bootToggle) bootToggle.checked = true;
       if (sketchToggle) sketchToggle.checked = true;
       if (greetingToggle) greetingToggle.checked = true;
-      if (taskVoiceToggle) taskVoiceToggle.checked = true;
-      if (taskVoiceVolSlider) taskVoiceVolSlider.value = 85;
-      if (taskVoiceVolVal) taskVoiceVolVal.textContent = '85%';
       if (greetingLinesEl) greetingLinesEl.value = '';
-      renderTaskVoiceList();
       window.__AGY_GREETING_NEED_FRESH__ = true;
       syncEmptyGreeting();
       if (uploadStatus) uploadStatus.textContent = '';
@@ -3723,101 +3595,18 @@
       updateInputPreviews(DEFAULT_THEME_KEY);
     });
 
-    const taskVoiceToggle = container.querySelector('#agy-task-voice-toggle');
     const customVgToggle = container.querySelector('#agy-custom-vg-toggle');
     const customVgBox = container.querySelector('#agy-custom-vg-box');
-    const taskVoiceUpload = container.querySelector('#agy-task-voice-upload');
-    const taskVoiceTestBtn = container.querySelector('#agy-task-voice-test');
-    const taskVoiceVolSlider = container.querySelector('#agy-task-voice-vol');
-    const taskVoiceVolVal = container.querySelector('#agy-task-voice-vol-val');
-    const taskVoiceListEl = container.querySelector('#agy-task-voice-list');
     const greetingLinesEl = container.querySelector('#agy-greeting-lines');
     const greetingSaveBtn = container.querySelector('#agy-greeting-save');
     const greetingResetBtn = container.querySelector('#agy-greeting-reset');
     const greetingMsgEl = container.querySelector('#agy-greeting-msg');
 
-    function renderTaskVoiceList() {
-      if (!taskVoiceListEl) return;
-      const voices = getMediaLibrary('audio');
-      if (voices.length === 0) {
-        taskVoiceListEl.innerHTML = `<div style="font-size: 11.5px; color: #71717a; padding: 6px 2px;">No voice files yet. Click "Add Voice" to upload one or more .mp3/.wav/.ogg/.m4a files.</div>`;
-        return;
-      }
-      taskVoiceListEl.innerHTML = voices.map((v, idx) => `
-        <div style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.03);">
-          <span style="font-size: 10.5px; color: #93c5fd; min-width: 16px;">#${idx + 1}</span>
-          <span style="flex: 1; font-size: 11.5px; color: #e4e4e7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(v.name)}">${escapeHtml(v.name)}</span>
-          <button type="button" class="agy-tv-play-btn" data-url="${escapeHtml(v.url)}" title="Preview" style="padding: 2px 6px; border-radius: 5px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #e4e4e7; font-size: 10.5px; cursor: pointer;">▶</button>
-          <button type="button" class="agy-tv-del-btn" data-url="${escapeHtml(v.url)}" title="Delete voice" style="padding: 2px 6px; border-radius: 5px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.28); color: #fca5a5; font-size: 10.5px; cursor: pointer;">✕</button>
-        </div>
-      `).join('');
-
-      taskVoiceListEl.querySelectorAll('.agy-tv-play-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const url = btn.dataset.url || '';
-          if (url) playOneShotTaskAudio(url, getState().taskVoiceVol);
-        });
-      });
-      taskVoiceListEl.querySelectorAll('.agy-tv-del-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const url = btn.dataset.url || '';
-          if (url) deleteSavedMediaItem('audio', url);
-        });
-      });
-    }
-
-    if (taskVoiceToggle) {
-      taskVoiceToggle.addEventListener('change', (e) => {
-        applyTheme({ taskVoiceEnabled: e.target.checked });
-      });
-    }
-    if (taskVoiceVolSlider) {
-      taskVoiceVolSlider.addEventListener('input', (e) => {
-        const v = parseInt(e.target.value, 10);
-        if (taskVoiceVolVal) taskVoiceVolVal.textContent = v + '%';
-        applyTheme({ taskVoiceVol: v });
-      });
-    }
-    if (taskVoiceTestBtn) {
-      taskVoiceTestBtn.addEventListener('click', () => {
-        playRandomTaskVoice(true);
-      });
-    }
-    if (taskVoiceUpload) {
-      taskVoiceUpload.addEventListener('change', async (e) => {
-        const files = Array.from((e.target && e.target.files) || []);
-        if (files.length === 0) return;
-        if (uploadStatus) uploadStatus.textContent = `Loading ${files.length} voice(s)...`;
-        let nextVoices = getMediaLibrary('audio');
-        for (const file of files) {
-          const uploaded = await uploadMediaToServer(file, 'task_voice.mp3');
-          let mediaUrl = uploaded && uploaded.url ? uploaded.url : '';
-          const displayName = (uploaded && uploaded.name) || file.name || 'Task Voice';
-          if (!mediaUrl) {
-            mediaUrl = await new Promise((resolve) => {
-              const reader = new FileReader();
-              reader.onload = () => resolve(String(reader.result || ''));
-              reader.onerror = () => resolve('');
-              reader.readAsDataURL(file);
-            });
-          }
-          if (mediaUrl) {
-            nextVoices = upsertSavedMedia('audio', { url: mediaUrl, name: displayName, addedAt: Date.now() });
-          }
-        }
-        taskVoiceUpload.value = '';
-        applyTheme({ taskVoices: nextVoices, taskVoiceEnabled: true });
-        if (taskVoiceToggle) taskVoiceToggle.checked = true;
-        if (uploadStatus) uploadStatus.textContent = `Added ${files.length} voice(s) (${nextVoices.length} total)!`;
-        renderTaskVoiceList();
-      });
-    }
-
     if (customVgToggle && customVgBox) {
       customVgToggle.addEventListener('click', () => {
         const isHidden = customVgBox.style.display === 'none';
         customVgBox.style.display = isHidden ? 'grid' : 'none';
-        customVgToggle.textContent = isHidden ? 'Customize Voice & Greeting ▴' : 'Customize Voice & Greeting ▾';
+        customVgToggle.textContent = isHidden ? 'Customize Greeting ▴' : 'Customize Greeting ▾';
       });
     }
     if (greetingSaveBtn && greetingLinesEl) {
@@ -3848,7 +3637,6 @@
 
     async function deleteSavedMediaItem(kind, targetUrl) {
       const isVideo = kind === 'video';
-      const isAudio = kind === 'audio';
       const base = window.__AGY_MEDIA_BASE_URL__ ? String(window.__AGY_MEDIA_BASE_URL__).replace(/\/+$/, '') : '';
       if (base && canonicalMediaKey(targetUrl).startsWith('user_media/')) {
         try {
@@ -3868,21 +3656,17 @@
 
       const nextList = removeSavedMediaFromStore(kind, targetUrl);
       const curSt = getState();
-      const patch = isVideo ? { savedVideos: nextList } : (isAudio ? { taskVoices: nextList } : { savedImages: nextList });
+      const patch = isVideo ? { savedVideos: nextList } : { savedImages: nextList };
       if (isVideo && isSameMediaUrl(curSt.customVideo, targetUrl)) {
         patch.customVideo = '';
-      } else if (!isVideo && !isAudio && isSameMediaUrl(curSt.customWp, targetUrl)) {
+      } else if (!isVideo && isSameMediaUrl(curSt.customWp, targetUrl)) {
         patch.customWp = '';
       }
       applyTheme(patch);
       if (uploadStatus) {
-        uploadStatus.textContent = isVideo ? 'Removed video from library!' : (isAudio ? 'Removed voice from list!' : 'Removed image from library!');
+        uploadStatus.textContent = isVideo ? 'Removed video from library!' : 'Removed image from library!';
       }
-      if (isAudio) {
-        renderTaskVoiceList();
-      } else {
-        renderPresetsSection();
-      }
+      renderPresetsSection();
     }
 
     function renderPresetsSection() {
@@ -4049,7 +3833,6 @@
     }
 
     renderPresetsSection();
-    renderTaskVoiceList();
 
     (async () => {
       const base = window.__AGY_MEDIA_BASE_URL__ ? String(window.__AGY_MEDIA_BASE_URL__).replace(/\/+$/, '') : '';
@@ -4061,12 +3844,10 @@
         if (info && info.ok) {
           window.__AGY_USER_MEDIA__ = {
             images: Array.isArray(info.images) ? info.images : [],
-            videos: Array.isArray(info.videos) ? info.videos : [],
-            audios: Array.isArray(info.audios) ? info.audios : []
+            videos: Array.isArray(info.videos) ? info.videos : []
           };
           if (document.body.contains(container)) {
             renderPresetsSection();
-            renderTaskVoiceList();
           }
         }
       } catch (err) {}
@@ -4319,104 +4100,6 @@
     }
   }
 
-  const taskVoiceState = {
-    wasRunning: false,
-    lastUrl: location.href,
-    urlChangedAt: 0,
-    userCancelledAt: 0,
-    lastPlayedUrl: ''
-  };
-
-  function stopTaskAudio() {
-    const audio = window.__AGY_TASK_AUDIO__;
-    if (audio) {
-      try {
-        audio.pause();
-        audio.removeAttribute('src');
-        audio.load();
-      } catch (e) {}
-      window.__AGY_TASK_AUDIO__ = null;
-    }
-  }
-
-  function playOneShotTaskAudio(rawUrl, volPercent = 85) {
-    const resolved = resolveMediaUrl(rawUrl);
-    if (!resolved) return;
-    stopTaskAudio();
-    try {
-      const audio = new Audio(resolved);
-      audio.volume = Math.max(0, Math.min(1, (Number.isFinite(Number(volPercent)) ? Number(volPercent) : 85) / 100));
-      window.__AGY_TASK_AUDIO__ = audio;
-      const cleanup = () => {
-        try {
-          audio.pause();
-          audio.removeAttribute('src');
-          audio.load();
-        } catch (e) {}
-        if (window.__AGY_TASK_AUDIO__ === audio) {
-          window.__AGY_TASK_AUDIO__ = null;
-        }
-      };
-      audio.addEventListener('ended', cleanup, { once: true });
-      audio.addEventListener('error', cleanup, { once: true });
-      audio.play().catch(cleanup);
-    } catch (e) {}
-  }
-
-  function playRandomTaskVoice(ignoreEnabled = false) {
-    const st = getState();
-    if (!ignoreEnabled && !st.taskVoiceEnabled) return;
-    const pool = getMediaLibrary('audio');
-    if (pool.length === 0) return;
-    const choices = pool.length > 1
-      ? pool.filter((item) => !isSameMediaUrl(item.url, taskVoiceState.lastPlayedUrl))
-      : pool;
-    const picked = choices[Math.floor(Math.random() * choices.length)] || pool[0];
-    if (!picked || !picked.url) return;
-    taskVoiceState.lastPlayedUrl = picked.url;
-    playOneShotTaskAudio(picked.url, st.taskVoiceVol);
-  }
-  window.__ANTIGRAVITY_TEST_TASK_VOICE__ = () => playRandomTaskVoice(true);
-
-  function syncTaskCompletionVoice() {
-    if (location.href !== taskVoiceState.lastUrl) {
-      taskVoiceState.lastUrl = location.href;
-      taskVoiceState.urlChangedAt = Date.now();
-      taskVoiceState.wasRunning = false;
-      if (window.__AGY_TASK_COMPLETE_TIMER__) {
-        clearTimeout(window.__AGY_TASK_COMPLETE_TIMER__);
-        window.__AGY_TASK_COMPLETE_TIMER__ = null;
-      }
-      return;
-    }
-    const shell = findActiveShell();
-    if (!shell) return;
-    const isRunning = Boolean(shell.querySelector('[data-testid="input-cancel-button"]'));
-    if (isRunning) {
-      if (window.__AGY_TASK_COMPLETE_TIMER__) {
-        clearTimeout(window.__AGY_TASK_COMPLETE_TIMER__);
-        window.__AGY_TASK_COMPLETE_TIMER__ = null;
-      }
-      taskVoiceState.wasRunning = true;
-      return;
-    }
-    if (!taskVoiceState.wasRunning || window.__AGY_TASK_COMPLETE_TIMER__) return;
-    window.__AGY_TASK_COMPLETE_TIMER__ = setTimeout(() => {
-      window.__AGY_TASK_COMPLETE_TIMER__ = null;
-      const curShell = findActiveShell();
-      if (!curShell || curShell.querySelector('[data-testid="input-cancel-button"]')) {
-        return;
-      }
-      taskVoiceState.wasRunning = false;
-      const now = Date.now();
-      if (location.href !== taskVoiceState.lastUrl) return;
-      if (now - taskVoiceState.urlChangedAt < 1200) return;
-      if (now - taskVoiceState.userCancelledAt < 1800) return;
-      if (!curShell.querySelector('[data-testid="agent-response"]')) return;
-      playRandomTaskVoice(false);
-    }, 450);
-  }
-
   function tick() {
     const activeShell = findActiveShell();
     if (activeShell) {
@@ -4430,7 +4113,6 @@
     hookSidebarScroll();
     hookShellMetrics();
     syncEmptyGreeting();
-    syncTaskCompletionVoice();
   }
 
   function scheduleTick() {
@@ -4453,21 +4135,7 @@
   if (window.__AGY_SCROLL_AC__) {
     try { window.__AGY_SCROLL_AC__.abort(); } catch (e) {}
   }
-  if (window.__AGY_TASK_COMPLETE_TIMER__) {
-    clearTimeout(window.__AGY_TASK_COMPLETE_TIMER__);
-    window.__AGY_TASK_COMPLETE_TIMER__ = null;
-  }
   window.__AGY_SCROLL_AC__ = new AbortController();
-  document.addEventListener('click', (e) => {
-    if (e.target && typeof e.target.closest === 'function' && e.target.closest('[data-testid="input-cancel-button"]')) {
-      taskVoiceState.userCancelledAt = Date.now();
-    }
-  }, { capture: true, signal: window.__AGY_SCROLL_AC__.signal });
-  document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && String(e.key || '').toLowerCase() === 'd') {
-      taskVoiceState.userCancelledAt = Date.now();
-    }
-  }, { capture: true, signal: window.__AGY_SCROLL_AC__.signal });
   window.addEventListener('load', () => scheduleTitleBarSync(), { signal: window.__AGY_SCROLL_AC__.signal });
   window.addEventListener('focus', () => syncTitleBarOverlay(), { signal: window.__AGY_SCROLL_AC__.signal });
   document.addEventListener('visibilitychange', () => {
